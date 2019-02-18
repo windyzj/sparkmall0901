@@ -21,12 +21,12 @@ class CategoryAccumulator extends AccumulatorV2[String,mutable.HashMap[String,Lo
     categoryMap.clear()
   }
 
-  //累加
+  //累加  map+key
   override def add(key: String): Unit = {
        categoryMap(key)= categoryMap.getOrElse(key,0L)+1L
   }
 
-  //合并
+  //合并  map+map
   override def merge(other: AccumulatorV2[String, mutable.HashMap[String, Long]]): Unit = {
     val otherMap: mutable.HashMap[String, Long] = other.value
     //两个map 根据key值进行 合并
