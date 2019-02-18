@@ -9,9 +9,10 @@ import org.apache.spark.sql.SparkSession
 
 import scala.collection.mutable
 
+//需求一
 object CategoryCountHandler {
 
-  def handle(sparkSession: SparkSession,userVisitActionRDD:RDD[UserVisitAction] ,taskId:String): Unit ={
+  def handle(sparkSession: SparkSession,userVisitActionRDD:RDD[UserVisitAction] ,taskId:String): List[CategoryCount] ={
     //    2 定义累加器  注册累加器
     val accumulator = new CategoryAccumulator
     sparkSession.sparkContext.register(accumulator)
@@ -74,6 +75,7 @@ object CategoryCountHandler {
 
     JdbcUtil.executeBatchUpdate("insert into category_top10 values(?,?,?,?,?)",resultList)
 
+    sortedCategoryCountList
   }
 
 }
