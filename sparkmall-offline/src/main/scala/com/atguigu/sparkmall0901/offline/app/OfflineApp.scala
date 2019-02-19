@@ -7,7 +7,7 @@ import com.atguigu.sparkmall0901.common.bean.UserVisitAction
 import com.atguigu.sparkmall0901.common.utils.{JdbcUtil, PropertiesUtil}
 import com.atguigu.sparkmall0901.offline.acc.CategoryAccumulator
 import com.atguigu.sparkmall0901.offline.bean.CategoryCount
-import com.atguigu.sparkmall0901.offline.handler.CategoryCountHandler
+import com.atguigu.sparkmall0901.offline.handler.{CategoryCountHandler, CategoryTopSessionHandler}
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -27,10 +27,12 @@ object OfflineApp {
     val userVisitActionRDD: RDD[UserVisitAction] = readUserVisitActionToRDD(sparkSession)
 
     //需求一
-    CategoryCountHandler.handle(sparkSession,userVisitActionRDD,taskId)
+    val categoryCountList: List[CategoryCount] = CategoryCountHandler.handle(sparkSession,userVisitActionRDD,taskId)
     println("需求一完成！！")
 
-    //
+    //需求二
+    CategoryTopSessionHandler.handle(sparkSession,userVisitActionRDD,taskId,categoryCountList)
+    println("需求二完成！！")
   }
 
 

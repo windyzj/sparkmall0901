@@ -11,6 +11,8 @@
     <modules>
         <module>sparkmall-common</module>
         <module>sparkmall-mock</module>
+        <module>sparkmall-offline</module>
+        <module>sparkmall-realtime</module>
     </modules>
 
     <properties>
