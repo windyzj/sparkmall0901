@@ -2,7 +2,7 @@ package com.atguigu.sparkmall0901.realtime.handler
 
 import java.util.Properties
 
-import com.atguigu.sparkmall0901.common.utils.PropertiesUtil
+import com.atguigu.sparkmall0901.common.utils.{PropertiesUtil, RedisUtil}
 import com.atguigu.sparkmall0901.realtime.bean.AdsLog
 import org.apache.spark.streaming.dstream.DStream
 import redis.clients.jedis.Jedis
@@ -35,16 +35,16 @@ object AreaCityAdsCountHandler {
     }
     //  3、把结果保存到redis,    hash     hset
     adsClickCountDstream.foreachRDD { rdd =>
-      val prop: Properties = PropertiesUtil.load("config.properties")
+
       rdd.foreachPartition { adsClickCountItr =>
         //建立redis连接
-        val jedis = new Jedis(prop.getProperty("redis.host"), prop.getProperty("redis.port").toInt) //driver
-        adsClickCountItr.foreach { case (key, count) =>
+        val jedis: Jedis = RedisUtil.getJedisClient
+          adsClickCountItr.foreach { case (key, count) =>
           jedis.hset("date:area:city:ads", key, count.toString)
         }
         jedis.close()
       }
 
-    }
+    }3
   }
 }
