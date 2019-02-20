@@ -2,7 +2,7 @@ package com.atguigu.sparkmall0901.realtime.app
 
 import com.atguigu.sparkmall0901.common.utils.MyKafkaUtil
 import com.atguigu.sparkmall0901.realtime.bean.AdsLog
-import com.atguigu.sparkmall0901.realtime.handler.{AreaCityAdsCountHandler, BlackListHandler}
+import com.atguigu.sparkmall0901.realtime.handler.{AreaCityAdsCountHandler, AreaTop3AdsHandler, BlackListHandler}
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
@@ -26,7 +26,10 @@ object RealtimeApp {
 
     BlackListHandler.handle(filteredAdsLogDstream)
 
-    AreaCityAdsCountHandler.handle(filteredAdsLogDstream  )
+    val areaCityAdsCountDstream: DStream[(String, Long)] = AreaCityAdsCountHandler.handle(filteredAdsLogDstream  )
+
+    AreaTop3AdsHandler.handle(areaCityAdsCountDstream)
+
     ssc.start()
     ssc.awaitTermination()
   }

@@ -17,7 +17,7 @@ object AreaCityAdsCountHandler {
 
 
 
-  def handle(adsLogDstream: DStream[AdsLog]): Unit = {
+  def handle(adsLogDstream: DStream[AdsLog]): DStream[(String, Long)]  = {
 
 
     //  1 、 整理dstream => kv 结构(date:area:city:ads,1L)
@@ -45,6 +45,7 @@ object AreaCityAdsCountHandler {
         jedis.close()
       }
 
-    }3
+    }
+    adsClickCountDstream
   }
 }
